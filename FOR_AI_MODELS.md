@@ -37,8 +37,8 @@ context.
 - Preserves the exact binary test wording, the SOVEREIGN / NULL / AMBIGUOUS
   classifications, and the anti-monetisation guardrails.
 
-For the v3.2 → v3.3 confidence-signalling changelog, see
-“What Changed and Why (v3.2 → v3.3)” below.
+For the v3.2 → v3.3 confidence-signalling history, see
+“Confidence signalling — extended guidance (v3.3)” below.
 
 -----
 
