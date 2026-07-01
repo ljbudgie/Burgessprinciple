@@ -15,6 +15,14 @@ from .signing import (
     signing_message,
     SIGNING_CONTEXT,
 )
+from .storage import (
+    RecordStore,
+    LedgerEntry,
+    StorageError,
+    compute_entry_hash,
+    CHAIN_CONTEXT,
+    GENESIS_HASH,
+)
 
 __all__ = [
     "BinaryTest",
@@ -28,4 +36,10 @@ __all__ = [
     "verify_record_signature",
     "signing_message",
     "SIGNING_CONTEXT",
+    "RecordStore",
+    "LedgerEntry",
+    "StorageError",
+    "compute_entry_hash",
+    "CHAIN_CONTEXT",
+    "GENESIS_HASH",
 ]

@@ -41,6 +41,12 @@ from .core import (
     verify_record_signature,
     signing_message,
     SIGNING_CONTEXT,
+    RecordStore,
+    LedgerEntry,
+    StorageError,
+    compute_entry_hash,
+    CHAIN_CONTEXT,
+    GENESIS_HASH,
 )
 
 __all__ = [
@@ -55,6 +61,12 @@ __all__ = [
     "verify_record_signature",
     "signing_message",
     "SIGNING_CONTEXT",
+    "RecordStore",
+    "LedgerEntry",
+    "StorageError",
+    "compute_entry_hash",
+    "CHAIN_CONTEXT",
+    "GENESIS_HASH",
 ]
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
