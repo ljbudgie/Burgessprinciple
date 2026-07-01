@@ -271,7 +271,7 @@ python verifiable_oversight/examples/example_storage.py
 - **Cryptographic signing** ✅ *(Phase 2)* — Ed25519 private key → `signature` field populated; public key attached for independent, offline verification
 - **Record storage** ✅ *(Phase 3)* — append-only, hash-chained JSON-L ledger; records keyed by fingerprint; chain verified on load and on demand
 - **Iris integration** — Iris can create and verify records on behalf of a user in conversation
-- **Email domain** — sovereign email application; each outbound communication creates a record; each institutional response is assessed on receipt
+- **Email domain** ✅ *(Phase 4A)* — sovereign email-only application; each outbound communication creates a record; each institutional response is assessed on receipt against the binary test and the non-negotiable accessibility requirements (no portal redirect, no telephone, no CAPTCHA, no app-only verification, named individual for every significant response, RA confirmed and recorded before the first substantive exchange)
 - **Banking domain** — FCA DISP deadlines; automated credit decision assessment
 - **Medical domain** — clinical decision support; consent; Mental Capacity Act 2005
 - **Post-quantum companion** — hybrid Ed25519 + ML-DSA/SLH-DSA signatures, reusing the `onchain-protocol` provider architecture
