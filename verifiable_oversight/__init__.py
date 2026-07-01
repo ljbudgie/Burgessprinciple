@@ -29,7 +29,19 @@ Quick start:
     print(report)   # [VALID] … integrity confirmed, all checks passed.
 """
 
-from .core import BinaryTest, Verdict, BinaryTestResult, DecisionRecord, Verifier
+from .core import (
+    BinaryTest,
+    Verdict,
+    BinaryTestResult,
+    DecisionRecord,
+    Verifier,
+    VerificationReport,
+    RecordSigner,
+    SigningError,
+    verify_record_signature,
+    signing_message,
+    SIGNING_CONTEXT,
+)
 
 __all__ = [
     "BinaryTest",
@@ -37,6 +49,12 @@ __all__ = [
     "BinaryTestResult",
     "DecisionRecord",
     "Verifier",
+    "VerificationReport",
+    "RecordSigner",
+    "SigningError",
+    "verify_record_signature",
+    "signing_message",
+    "SIGNING_CONTEXT",
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

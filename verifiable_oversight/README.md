@@ -1,9 +1,9 @@
 # Verifiable Human Oversight
 
 **Part of the Burgess Principle ecosystem**  
-**Version:** 0.1.0 (Phase 1 — MVP)  
+**Version:** 0.2.0 (Phase 2 — cryptographic signing)  
 **Language:** Python 3.11+  
-**Dependencies:** stdlib only (no Pydantic, no third-party packages required for core)
+**Dependencies:** stdlib only for the core test and records. Ed25519 signing is an optional add-on requiring [PyNaCl](https://pypi.org/project/PyNaCl/) (`pip install PyNaCl`).
 
 ---
 
@@ -78,8 +78,9 @@ verifiable-oversight/
 ├── __init__.py              # Top-level package — import BinaryTest, DecisionRecord, Verifier here
 ├── core/
 │   ├── binary_test.py       # Five-element engine → SOVEREIGN / NULL / AMBIGUOUS
-│   ├── decision_record.py   # Sealed record with SHA-256 fingerprint
-│   └── verifier.py          # Integrity + logical consistency validation
+│   ├── decision_record.py   # Sealed record with SHA-256 fingerprint + signature
+│   ├── signing.py           # Ed25519 RecordSigner + verify_record_signature (Phase 2)
+│   └── verifier.py          # Integrity + logical consistency + signature validation
 ├── domains/
 │   ├── base.py              # Abstract domain — extend to add new domains
 │   ├── general.py           # No-extension baseline
@@ -90,7 +91,8 @@ verifiable-oversight/
 ├── examples/
 │   ├── example_sovereign.py # LGO Rebecca Hunt — SOVEREIGN process, wrong law
 │   ├── example_null.py      # EASS Rachel.D — NULL, circular referral
-│   └── example_ambiguous.py # Trading 212 — AMBIGUOUS pending answer
+│   ├── example_ambiguous.py # Trading 212 — AMBIGUOUS pending answer
+│   └── example_signed.py    # Signed NULL record — Ed25519 non-repudiation
 └── docs/
     └── specification.md     # Full specification with legal grounding
 ```
@@ -102,12 +104,14 @@ verifiable-oversight/
 From the repo root:
 
 ```bash
-python verifiable-oversight/examples/example_null.py
-python verifiable-oversight/examples/example_sovereign.py
-python verifiable-oversight/examples/example_ambiguous.py
+python verifiable_oversight/examples/example_null.py
+python verifiable_oversight/examples/example_sovereign.py
+python verifiable_oversight/examples/example_ambiguous.py
+python verifiable_oversight/examples/example_signed.py   # requires PyNaCl
 ```
 
-No installation required. stdlib only.
+No installation required for the first three. stdlib only. The signed example
+additionally requires PyNaCl (`pip install PyNaCl`).
 
 ---
 
@@ -141,18 +145,73 @@ To add a new domain, subclass `BaseDomain` and implement `name`, `guidance`, and
 
 Every `DecisionRecord` is sealed with a SHA-256 fingerprint on creation. The fingerprint covers all content fields. Any change to the record after sealing will cause `verify_integrity()` to return `False`.
 
-The `signature` field is reserved for Ed25519 / post-quantum signing (Phase 2). The data model supports it without structural changes — the signing infrastructure connects to the existing [`CRYPTOGRAPHIC_IDENTITY.md`](../CRYPTOGRAPHIC_IDENTITY.md) architecture.
+The `signature` field carries an Ed25519 signature over the fingerprint (Phase 2 — see *Cryptographic signing* below). The data model supports it without structural changes — the signing infrastructure connects to the existing [`CRYPTOGRAPHIC_IDENTITY.md`](../CRYPTOGRAPHIC_IDENTITY.md) architecture.
+
+---
+
+## Cryptographic signing (Phase 2)
+
+The fingerprint proves a record has **not changed**. A signature proves **who
+produced it**. A `RecordSigner` holds an Ed25519 private key, signs the sealed
+record's fingerprint, and attaches the signature and public key so any third
+party can verify the finding **offline, with no shared secret**.
+
+```python
+from verifiable_oversight import (
+    BinaryTest, DecisionRecord, RecordSigner, Verifier, verify_record_signature,
+)
+
+record = DecisionRecord.create(
+    subject="Fourth response — circular referral to EHRC",
+    institution="EASS",
+    binary_test=BinaryTest(context="No named individual across four responses."),
+)
+
+signer = RecordSigner.generate()   # or RecordSigner(private_key_hex)
+signer.sign(record)                # populates record.signature / public_key / signed_at
+
+record.is_signed                   # True
+record.public_key                  # publish this for independent verification
+verify_record_signature(record)    # True
+
+Verifier().verify(record).signature_ok  # True
+
+# Tamper-evidence: any change after signing breaks both integrity and signature.
+record.subject = "Altered"
+verify_record_signature(record)    # False
+```
+
+**What signing adds:**
+
+- **Non-repudiation** — the record is bound to the holder of a published public key.
+- **Independent verification** — a tribunal, ombudsman, or opposing institution
+  can verify the signature with only the record and the public key.
+- **Backward compatible** — the signature lives *outside* the canonical
+  fingerprint, so signing never changes a record's fingerprint, and unsigned
+  records behave exactly as in Phase 1 (`Verifier` reports `signature_ok=None`).
+
+The signed message is domain-separated and reproducible:
+`SIGNING_CONTEXT + b":" + fingerprint` (see `signing_message`). PyNaCl is required
+only for signing/verification; the stdlib core continues to work without it.
+
+Run the signed example:
+
+```bash
+pip install PyNaCl
+python verifiable_oversight/examples/example_signed.py
+```
 
 ---
 
 ## Phase 2 roadmap
 
-- **Cryptographic signing** — Ed25519 private key → `signature` field populated; public key published for independent verification
+- **Cryptographic signing** ✅ *(this release)* — Ed25519 private key → `signature` field populated; public key attached for independent, offline verification
 - **Record storage** — append-only SQLite or JSON-L log; records keyed by fingerprint
 - **Iris integration** — Iris can create and verify records on behalf of a user in conversation
 - **Email domain** — sovereign email application; each outbound communication creates a record; each institutional response is assessed on receipt
 - **Banking domain** — FCA DISP deadlines; automated credit decision assessment
 - **Medical domain** — clinical decision support; consent; Mental Capacity Act 2005
+- **Post-quantum companion** — hybrid Ed25519 + ML-DSA/SLH-DSA signatures, reusing the `onchain-protocol` provider architecture
 
 ---
 

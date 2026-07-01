@@ -60,8 +60,15 @@ class DecisionRecord:
         SHA-256 of the canonical JSON representation of this record.
         Set automatically by `seal()`. Used to detect tampering.
     signature:
-        Reserved for cryptographic signature (Ed25519 / PQC).
-        Populate via a signing provider that holds the private key.
+        Ed25519 signature (hex) over the fingerprint, produced by a
+        RecordSigner. Populated by `verifiable_oversight.core.signing`.
+        Lives outside the canonical fingerprint, so signing never changes
+        the fingerprint and unsigned records are unaffected.
+    public_key:
+        Ed25519 public key (hex) corresponding to `signature`. Published so
+        third parties can verify the signature independently and offline.
+    signed_at:
+        UTC ISO-8601 timestamp of when the signature was applied.
     notes:
         Free-text supplementary observations.
     """
@@ -81,6 +88,8 @@ class DecisionRecord:
     domain_metadata: dict[str, Any] = field(default_factory=dict)
     fingerprint: Optional[str] = None
     signature: Optional[str] = None
+    public_key: Optional[str] = None
+    signed_at: Optional[str] = None
     notes: Optional[str] = None
 
     # ------------------------------------------------------------------
@@ -180,6 +189,8 @@ class DecisionRecord:
             **self._canonical_dict(),
             "fingerprint": self.fingerprint,
             "signature": self.signature,
+            "public_key": self.public_key,
+            "signed_at": self.signed_at,
             "reasoning": self.result.reasoning,
         }
 
@@ -189,6 +200,11 @@ class DecisionRecord:
     @property
     def verdict(self) -> Verdict:
         return self.result.verdict
+
+    @property
+    def is_signed(self) -> bool:
+        """True if the record carries both a signature and a public key."""
+        return bool(self.signature and self.public_key)
 
     def __str__(self) -> str:
         return (

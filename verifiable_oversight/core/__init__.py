@@ -7,7 +7,14 @@ Exports the primary public API:
 
 from .binary_test import BinaryTest, Verdict, BinaryTestResult
 from .decision_record import DecisionRecord
-from .verifier import Verifier
+from .verifier import Verifier, VerificationReport
+from .signing import (
+    RecordSigner,
+    SigningError,
+    verify_record_signature,
+    signing_message,
+    SIGNING_CONTEXT,
+)
 
 __all__ = [
     "BinaryTest",
@@ -15,4 +22,10 @@ __all__ = [
     "BinaryTestResult",
     "DecisionRecord",
     "Verifier",
+    "VerificationReport",
+    "RecordSigner",
+    "SigningError",
+    "verify_record_signature",
+    "signing_message",
+    "SIGNING_CONTEXT",
 ]
