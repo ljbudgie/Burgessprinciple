@@ -1,4 +1,4 @@
-# Institution Audit Taxonomy — v1.2
+# Institution Audit Taxonomy — v1.3
 
 **Canonical definition.** This file is the single authoritative source for the
 taxonomy used to score institutions in
@@ -40,8 +40,9 @@ and time.
 v1.0 named the five dimensions; v1.1 adds explicit per-score anchors so any
 two auditors scoring the same evidence reach the same number; v1.2 adds
 interpretation notes for recurring evidence patterns without changing any
-anchor. Score only what is evidenced in writing. When evidence is genuinely
-between two anchors, take the lower score.
+anchor; v1.3 adds disability and reasonable-adjustment interpretation notes
+on the same basis. Score only what is evidenced in writing. When evidence is
+genuinely between two anchors, take the lower score.
 
 ### D1 — Response to the Burgess Principle binary question
 
@@ -158,6 +159,59 @@ informs *expectation and escalation*, not the score:
 Sector context is recorded in the Accountability Profile (below), never as a
 multiplier or modifier of the numeric score.
 
+### Disability and reasonable adjustments (v1.3)
+
+A disclosed disability, a disclosed vulnerability, or a requested reasonable
+adjustment is a **specific fact of the case**. The existing anchors already
+turn on whether the specific facts were engaged; these notes record how that
+applies when one of the specific facts is the individual's disability, so any
+two auditors reach the same number. No anchor changes.
+
+- **D1 — the binary question includes the disability.** Where a disability or
+  adjustment need was disclosed in writing, a "direct answer" for D1 = 3–4
+  must engage the case *as raised* — including the disability. A named
+  reviewer who answers the binary question but is silent on a disclosed
+  disability central to the complaint has given limited case-specific detail:
+  D1 caps at 3.
+- **D2 — review that ignores a disclosed disability is not case-specific
+  review.** A written response that does not acknowledge a disclosed
+  disability, vulnerability, or pending reasonable-adjustment request has not
+  referenced the specific facts of the case: D2 caps at 2 (named role or
+  team, no case-specific facts), regardless of how much else it covers. To
+  reach D2 = 3–4 the written record must show the named reviewer saw and
+  considered the disclosed disability and any adjustment requested.
+- **D3 — the statutory clock does not pause for access barriers the
+  institution created.** Where the individual's response time was extended by
+  the institution's own failure to provide a requested adjustment (e.g.
+  refusing an accessible format, insisting on a channel the person cannot
+  use), that delay is the institution's, not the individual's. It does not
+  improve the institution's D3, and time the individual lost to the barrier
+  is disregarded when assessing whether the institution responded "without
+  prompting".
+- **D4 — remedy must include the adjustment.** Where a reasonable adjustment
+  was requested, a remedy that resolves the substantive issue but leaves the
+  adjustment unmet is a partial remedy: D4 caps at 2. "Full remedy delivered"
+  (D4 = 4) requires the adjustment delivered and confirmed in writing
+  alongside the substantive remedy.
+- **D5 — repeat adjustment failures are systemic.** A repeated failure to
+  apply an adjustment the institution has already been told about (re-sending
+  inaccessible formats, re-routing to a barred channel, requiring the same
+  disclosure again) is direct evidence of no systemic change: D5 = 0. Under
+  the Equality Act 2010 the duty to make reasonable adjustments is
+  anticipatory for service providers — an institution that only reacts, per
+  contact, after the same disclosure has not made a process change.
+
+**Relationship to Accessibility NULL (scoring rule 5).** Accessibility NULL
+covers the case where the barrier prevents the question being asked at all.
+These notes cover the case where the question *was* asked and answered, but
+the disability was scored out of the "specific facts". Both are recorded;
+they are complementary, not alternatives.
+
+**Accountability Profile.** Where a disability or adjustment was disclosed,
+the entry's Accountability Profile records: what was disclosed, what
+adjustment was requested, and whether it was acknowledged, delivered, or
+ignored — so adjustment-failure patterns are visible across the register.
+
 ---
 
 ## Scoring rules
@@ -249,6 +303,7 @@ systemic change (D5 0).
 | v1.0 | 2025–2026 register | Five dimensions (D1–D5, 0–4 each) and four bands defined inline in the register and audit log. |
 | v1.1 | June 2026 | Canonical standalone file. Adds explicit per-score anchors for each dimension and codifies the scoring rules already in practice (provisional findings, clean negative, Accessibility NULL, evidence-in-writing). **Additive only** — dimensions, weights, and bands are unchanged, so every score recorded under v1.0 remains valid without re-scoring. |
 | v1.2 | July 2026 | Interpretation notes for recurring evidence patterns (template letters, weasel responses, speed-is-not-review, delegated self-investigation); evidence guidance for AI-involved processes; non-scoring sector context notes; Accountability Profile; Equality Act cross-link for Accessibility NULL; register-level aggregate statistics; extensibility protocol. **Additive only** — dimensions, weights, bands, and anchors are unchanged, so every score recorded under v1.0 or v1.1 remains valid without re-scoring. |
+| v1.3 | July 2026 | Disability and reasonable-adjustment interpretation notes: a disclosed disability is a specific fact of the case, so responses that ignore it cap D1/D2; unmet adjustments cap D4; institution-created access barriers do not improve D3; repeat adjustment failures score D5 = 0. Accountability Profile records disclosure and adjustment status. **Additive only** — dimensions, weights, bands, and anchors are unchanged, so every score recorded under v1.0–v1.2 remains valid without re-scoring. |
 
 Changes to dimensions, weights, or bands require a major version bump and
 explicit review by @ljbudgie, with existing register entries either re-scored
