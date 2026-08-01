@@ -87,7 +87,12 @@ is durable accountability work without burning out the people protecting it.
 3. Ensure your changes follow the tone and guidelines above.
 4. **Keep your PR focused.** One concern per PR. Do not bundle unrelated features, demos, or prototypes — even if they're interesting. A focused PR is easier to review, less likely to introduce security issues, and more likely to be merged.
 5. **Review your code for security issues** before submitting. Check for XSS, injection, hardcoded secrets, and input-manipulation risks.
-6. Open a Pull Request with a clear description of what you changed and why. The PR template will guide you through the required checklist.
+6. **If you moved or renamed a document, or added links**, run
+   `python3 scripts/check_links.py` from the repo root. It resolves every
+   relative link in tracked markdown and never touches the network. CI runs it
+   on every push and pull request. If you have edited an AI-facing document,
+   also run `python3 scripts/lint_ai_docs.py`.
+7. Open a Pull Request with a clear description of what you changed and why. The PR template will guide you through the required checklist.
 
 We will review PRs with the help of AI tools where useful, but the final decision rests with the maintainer to protect the integrity of the project.
 
