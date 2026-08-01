@@ -50,6 +50,10 @@ which half of the admission rule it meets. Claiming Core is a request for
 founder review, not a shortcut past it. Nothing is Extensions by default —
 Extensions is a deliberate placement, not a residue.
 
+`scripts/check_doc_coverage.py` keeps this map honest: CI fails if a root
+document is not placed in a tier below, or not indexed in
+[NAVIGATION.md](./NAVIGATION.md).
+
 ---
 
 ## Tier 1 — Core
@@ -147,6 +151,7 @@ Core, Toolkit, or Extensions, and the admission rule does not apply to them.
 | Contribution and conduct | [CONTRIBUTING.md](./CONTRIBUTING.md), [CONTRIBUTING_AI_DOCS.md](./CONTRIBUTING_AI_DOCS.md), [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md), [GOVERNANCE.md](./GOVERNANCE.md), [SECURITY.md](./SECURITY.md) |
 | Licensing | [LICENSE.md](./LICENSE.md) |
 | Project record | [CHANGELOG.md](./CHANGELOG.md), [RELEASE_NOTES.md](./RELEASE_NOTES.md), [STATUS.md](./STATUS.md) |
+| Published site and supporting docs | [docs/](./docs/) — the published site surface, the 90-day plan, and long-form analysis |
 | Sibling repositories | [ECOSYSTEM.md](./ECOSYSTEM.md) — the map outside this repository |
 
 ---

@@ -122,7 +122,12 @@ is durable accountability work without burning out the people protecting it.
    relative link in tracked markdown and never touches the network. CI runs it
    on every push and pull request. If you have edited an AI-facing document,
    also run `python3 scripts/lint_ai_docs.py`.
-7. Open a Pull Request with a clear description of what you changed and why. The PR template will guide you through the required checklist.
+7. **If you added a document at the repository root**, run
+   `python3 scripts/check_doc_coverage.py`. It fails if the document is not
+   placed in a tier in [TIERS.md](./TIERS.md) or indexed in
+   [NAVIGATION.md](./NAVIGATION.md), so neither map can silently go stale. CI
+   runs it too.
+8. Open a Pull Request with a clear description of what you changed and why. The PR template will guide you through the required checklist.
 
 We will review PRs with the help of AI tools where useful, but the final decision rests with the maintainer to protect the integrity of the project.
 
