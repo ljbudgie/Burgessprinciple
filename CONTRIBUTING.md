@@ -24,6 +24,17 @@ Experimental changes or large new features should happen in your own fork first.
 - New country-specific legal equivalent tables or adaptations
 - Shareable graphics or outreach resources that stay in the same respectful tone (add to the `/memes` folder)
 
+### Which Tier Are You Changing?
+
+Before you open a PR, check [TIERS.md](./TIERS.md). The repository is split into
+**Core** (the binary test, its legal basis, the letters, the evidence record),
+**Toolkit** (implementations and tools), and **Extensions** (work built on top).
+
+Core changes require explicit review by @ljbudgie, and the admission rule
+applies: *nothing enters Core unless it strengthens the binary test itself or
+the path an affected person walks from a decision to accountable human review.*
+Toolkit and Extension changes follow ordinary lazy consensus.
+
 ### What We Do Not Merge
 
 - Changes that weaken, complicate, or alter the core binary question
