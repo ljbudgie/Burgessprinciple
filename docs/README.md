@@ -18,7 +18,6 @@ the practical routes below rather than reading every file in this folder.
 | Understand the whole repository in five minutes | [`../GETTING_STARTED.md`](../GETTING_STARTED.md) |
 | Use the public certification page | [`index.html`](./index.html) |
 | Apply for certification | [`apply/index.html`](./apply/index.html) |
-| Confirm what happens after certification payment | [`thank-you.html`](./thank-you.html) |
 | Read the agent transformation roadmap | [`AGENT_90_DAY_PLAN.md`](./AGENT_90_DAY_PLAN.md) |
 
 ## Applications & concepts
@@ -52,7 +51,6 @@ strategy agent rules remain in [`../AGENTS.md`](../AGENTS.md).
   Set the live Formspree form ID in the `ENDPOINT` constant near the bottom of
   the file. Until that is set, the form falls back to a pre-filled email so no
   application is lost.
-- [`thank-you.html`](./thank-you.html) — GoCardless post-payment confirmation.
 - [`CNAME`](./CNAME) — custom domain for the certification site.
 
 The certification mark is governed separately from the MIT-licensed repository
