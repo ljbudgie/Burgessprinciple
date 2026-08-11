@@ -3,7 +3,7 @@
   "$id": "https://burgess-principle.vercel.app/schemas/loop-finding.v1.json",
   "title": "Iris Institutional Delay Loop Finding v1",
   "type": "object",
-  "required": ["schema_version", "loop_detected", "loop_type", "loop_count", "days_consumed", "institution", "named_individual", "correspondence_refs", "accountability_finding", "summary"],
+  "required": ["schema_version", "loop_detected", "loop_type", "loop_count", "days_consumed", "institution", "named_individual", "correspondence_refs", "accountability_finding", "summary", "provisional", "requires_human_confirmation", "disclaimer"],
   "properties": {
     "schema_version": { "type": "integer", "const": 1 },
     "loop_detected": { "type": "boolean" },

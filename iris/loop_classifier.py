@@ -33,9 +33,13 @@ _IDENTITY = re.compile(
 )
 _CHANNEL = re.compile(r"\b(?:call|phone|telephone|visit|in person)\b", re.IGNORECASE)
 _EMAIL_ONLY = re.compile(r"\b(?:email[- ]only|written[- ]only|do not (?:call|phone))\b", re.IGNORECASE)
+_IDENTITY_CONFIRMED = re.compile(
+    r"\b(?:identity|identification|id)\b.{0,60}\b(?:provided|confirmed|verified|supplied)\b"
+    r"|\b(?:provided|confirmed|verified|supplied)\b.{0,60}\b(?:identity|identification|id)\b",
+    re.IGNORECASE,
+)
 _TEMPLATE = re.compile(r"\b(?:all points (?:have been )?addressed|standard response)\b", re.IGNORECASE)
 _REFERRAL = re.compile(r"\b(?:contact|refer(?:red)? to|speak to)\s+([A-Z][\w&' -]{1,50})", re.IGNORECASE)
-_PERSON_NAME = re.compile(r"\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\b")
 
 
 @dataclass(frozen=True)
@@ -158,9 +162,20 @@ def _count_templates(messages: list[_Message]) -> tuple[int, list[int]]:
 
 
 def _count_identity(messages: list[_Message]) -> tuple[int, list[int]]:
-    evidence = [index for index, message in enumerate(messages)
-                if message.direction == "institution" and _IDENTITY.search(message.content_summary)]
-    return len(evidence), evidence
+    identity_confirmed = False
+    cycles = 0
+    evidence: list[int] = []
+    for index, message in enumerate(messages):
+        if message.direction == "individual" and _IDENTITY_CONFIRMED.search(message.content_summary):
+            identity_confirmed = True
+        elif (
+            identity_confirmed
+            and message.direction == "institution"
+            and _IDENTITY.search(message.content_summary)
+        ):
+            cycles += 1
+            evidence.append(index)
+    return cycles, evidence
 
 
 def _count_channel_redirect(messages: list[_Message]) -> tuple[int, list[int]]:
@@ -174,18 +189,17 @@ def _count_channel_redirect(messages: list[_Message]) -> tuple[int, list[int]]:
     return len(evidence), evidence
 
 
-def _extract_named_individual(messages: list[_Message]) -> str | None:
-    for message in messages:
-        if message.direction == "institution":
-            match = _PERSON_NAME.search(message.sender)
-            if match:
-                return match.group(1)
-    return None
-
-
-def classify_thread(messages: Sequence[dict[str, Any]], institution: str | None = None) -> LoopFinding:
+def classify_thread(
+    messages: Sequence[dict[str, Any]],
+    institution: str | None = None,
+    named_individual: str | None = None,
+) -> LoopFinding:
     """Classify a correspondence thread without sending it beyond the local process."""
     parsed = _parse_messages(messages)
+    if institution is not None and not isinstance(institution, str):
+        raise ValueError("institution must be a string or null.")
+    if named_individual is not None and not isinstance(named_individual, str):
+        raise ValueError("named_individual must be a string or null.")
     detectors = {
         "insufficiency": _count_insufficiency(parsed),
         "circular_referral": _count_circular_referral(parsed),
@@ -197,7 +211,7 @@ def classify_thread(messages: Sequence[dict[str, Any]], institution: str | None 
     loop_type, (loop_count, evidence) = max(detectors.items(), key=lambda item: item[1][0])
     loop_detected = loop_count > 0
     refs = [parsed[index].reference for index in sorted(set(evidence))]
-    named_individual = _extract_named_individual(parsed)
+    named_individual = named_individual.strip() if named_individual else None
     resolved_institution = (institution or "").strip() or next(
         (message.sender for message in parsed if message.direction == "institution"), "Unspecified institution"
     )

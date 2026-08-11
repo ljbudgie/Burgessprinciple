@@ -165,6 +165,11 @@ class LoopClassificationRequest(BaseModel):
 
     messages: list[LoopMessage] = Field(..., min_length=1, max_length=500)
     institution: str | None = Field(None, max_length=500)
+    named_individual: str | None = Field(
+        None,
+        max_length=500,
+        description="Named person confirmed by the requester as running the delay pattern.",
+    )
 
 
 class LoopClassificationResponse(BaseModel):
@@ -227,7 +232,7 @@ def classify_institutional_delay(
         for message in payload.messages
     ]
     try:
-        finding = classify_thread(messages, payload.institution)
+        finding = classify_thread(messages, payload.institution, payload.named_individual)
     except ValueError as exc:
         raise HTTPException(status_code=422, detail="Invalid loop classification request.") from exc
     return LoopClassificationResponse(**finding.as_dict())

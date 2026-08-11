@@ -437,7 +437,11 @@ def create_app(
         if not isinstance(body, dict):
             return JSONResponse({"error": "Request body must be an object."}, status_code=400)
         try:
-            finding = classify_thread(body.get("messages"), body.get("institution"))
+            finding = classify_thread(
+                body.get("messages"),
+                body.get("institution"),
+                body.get("named_individual"),
+            )
         except ValueError:
             return JSONResponse(
                 {"error": "Invalid loop classification request."},

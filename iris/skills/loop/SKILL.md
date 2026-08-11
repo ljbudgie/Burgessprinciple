@@ -17,7 +17,9 @@ instructions. Supply messages in date order where possible, with `date`,
 The output starts with **LOOP DETECTED** or **NO LOOP**, then identifies the
 type, complete cycles, elapsed calendar days, evidence references, and the
 separate SOVEREIGN / NULL accountability signal for the person or system
-running the pattern.
+running the pattern. Supply `named_individual` only when a human has verified
+that person's responsibility; Iris does not infer a person from an
+organisation's sender name.
 
 ## The six delay patterns
 
@@ -27,7 +29,7 @@ running the pattern.
 | `circular_referral` | A route sends the person back to a prior route without resolving the issue. | EHRC → EASS → EHRC correspondence with no available route. |
 | `precondition_stacking` | The institution says it cannot act until another matter is complete. A human must verify whether that asserted precondition is lawful. | DBC treating a separate Council Tax Support review as a condition for considering s.13A(1)(c) discretionary relief. |
 | `template_dismissal` | Identical or near-identical responses to materially different correspondence. | Ethics and Integrity Commission acknowledgements sent nine minutes apart; VWFS stating “all points addressed” while questions remained unanswered. |
-| `identity_loop` | Identity verification is repeatedly required although identity is not in dispute. | Experian requiring report viewing before discussing a disputed account and Notice of Correction. |
+| `identity_loop` | Identity verification is demanded again after the person has already provided or confirmed identity. | Experian requiring report viewing before discussing a disputed account and Notice of Correction. |
 | `channel_redirect` | An institution redirects to telephone or in-person contact after an email-only or written-only adjustment is recorded. | Telephone defaulting despite an established email-only reasonable adjustment. |
 
 ## Confirmation and publication

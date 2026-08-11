@@ -58,7 +58,10 @@ def message(date: str, sender: str, content_summary: str, direction: str, refere
             "template_dismissal",
         ),
         (
-            [message("2026-08-01", "Experian", "Verify your identity before we engage with this dispute.", "institution", "A")],
+            [
+                message("2026-08-01", "Individual", "I have provided identity documents.", "individual", "A"),
+                message("2026-08-02", "Experian", "Verify your identity before we engage with this dispute.", "institution", "B"),
+            ],
             "identity_loop",
         ),
         (
@@ -83,9 +86,11 @@ def test_classifies_each_delay_pattern(messages, loop_type):
 def test_finding_is_sovereign_when_a_named_individual_is_identified():
     finding = classify_thread(
         [
-            message("2026-08-01", "Jane Smith", "Verify your identity before we engage.", "institution", "A"),
+            message("2026-08-01", "Individual", "I have provided identity documents.", "individual", "A"),
+            message("2026-08-02", "Jane Smith", "Verify your identity before we engage.", "institution", "B"),
         ],
         "Example Institution",
+        "Jane Smith",
     )
 
     assert finding.named_individual == "Jane Smith"
@@ -105,15 +110,52 @@ def test_no_loop_has_zero_elapsed_days_and_null_type():
     assert finding.summary.startswith("NO LOOP")
 
 
+def test_does_not_infer_a_person_from_an_institutional_sender():
+    finding = classify_thread(
+        [
+            message("2026-08-01", "Individual", "I have provided identity documents.", "individual", "A"),
+            message(
+                "2026-08-02",
+                "Darlington Borough Council",
+                "Verify your identity before we engage.",
+                "institution",
+                "B",
+            ),
+        ]
+    )
+
+    assert finding.named_individual is None
+    assert finding.accountability_finding == "NULL"
+
+
+def test_single_identity_request_is_not_an_identity_loop():
+    finding = classify_thread(
+        [message("2026-08-01", "Institution", "Verify your identity before we engage.", "institution", "A")]
+    )
+
+    assert finding.loop_detected is False
+
+
 def test_rejects_invalid_message_shape():
     with pytest.raises(ValueError, match="non-empty date"):
         classify_thread([{"date": "", "sender": "Institution", "content_summary": "text"}])
 
 
+def test_rejects_non_string_institution():
+    with pytest.raises(ValueError, match="institution must be a string"):
+        classify_thread(
+            [message("2026-08-01", "Institution", "Acknowledge receipt.", "institution", "A")],
+            institution=42,
+        )
+
+
 def test_finding_schema_is_valid_json_and_covers_endpoint_fields():
     schema = json.loads((_ROOT / "schemas" / "loop-finding.v1.json").read_text())
     finding = classify_thread(
-        [message("2026-08-01", "Institution", "Verify your identity before we engage.", "institution", "A")]
+        [
+            message("2026-08-01", "Individual", "I have provided identity documents.", "individual", "A"),
+            message("2026-08-02", "Institution", "Verify your identity before we engage.", "institution", "B"),
+        ]
     ).as_dict()
 
     assert set(schema["required"]).issubset(finding)
@@ -125,7 +167,8 @@ def test_api_endpoint_function_returns_provisional_finding():
         LoopClassificationRequest(
             institution="Example Institution",
             messages=[
-                message("2026-08-01", "Institution", "Verify your identity before we engage.", "institution", "A")
+                message("2026-08-01", "Individual", "I have provided identity documents.", "individual", "A"),
+                message("2026-08-02", "Institution", "Verify your identity before we engage.", "institution", "B"),
             ],
         )
     )
@@ -152,7 +195,8 @@ class TestLoopEndpoint:
             json={
                 "institution": "Example Institution",
                 "messages": [
-                    message("2026-08-01", "Institution", "Verify your identity before we engage.", "institution", "A")
+                    message("2026-08-01", "Individual", "I have provided identity documents.", "individual", "A"),
+                    message("2026-08-02", "Institution", "Verify your identity before we engage.", "institution", "B"),
                 ],
             },
         )
