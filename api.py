@@ -229,7 +229,7 @@ def classify_institutional_delay(
     try:
         finding = classify_thread(messages, payload.institution)
     except ValueError as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
+        raise HTTPException(status_code=422, detail="Invalid loop classification request.") from exc
     return LoopClassificationResponse(**finding.as_dict())
 
 

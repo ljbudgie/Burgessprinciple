@@ -167,4 +167,4 @@ class TestLoopEndpoint:
         response = self.client.post("/loop/classify", json={"messages": []})
 
         assert response.status_code == 400
-        assert response.json()["error"] == "messages must be a non-empty array."
+        assert response.json()["error"] == "Invalid loop classification request."

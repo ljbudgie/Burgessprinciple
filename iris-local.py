@@ -438,8 +438,11 @@ def create_app(
             return JSONResponse({"error": "Request body must be an object."}, status_code=400)
         try:
             finding = classify_thread(body.get("messages"), body.get("institution"))
-        except ValueError as exc:
-            return JSONResponse({"error": str(exc)}, status_code=400)
+        except ValueError:
+            return JSONResponse(
+                {"error": "Invalid loop classification request."},
+                status_code=400,
+            )
         return JSONResponse(finding.as_dict())
 
     @app.post("/api/generate-claim")
