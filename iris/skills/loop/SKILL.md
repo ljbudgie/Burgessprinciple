@@ -6,6 +6,18 @@ finding, and a named human must confirm it before it is recorded or published.
 It does not decide the underlying case, determine lawfulness, or replace the
 Burgess SOVEREIGN / NULL / AMBIGUOUS assessment.
 
+## First-run walkthrough
+
+New users should open
+[`loop-storyboard.html`](../../../loop-storyboard.html) before building JSON by
+hand. The storyboard shows six sample delay patterns (plus a no-loop control),
+a correspondence timeline with calendar days, the dual signal panel (**delay
+pattern** separate from **accountability**), and a confirmation gate before
+copying a draft register entry. Sample threads live in
+[`examples/loop-storyboard-samples.json`](../../../examples/loop-storyboard-samples.json).
+Paste-your-own and “Re-run via local `/loop/classify`” need Iris local or
+another host serving the classify endpoint.
+
 ## When to use it
 
 Use `/loop/classify` when a correspondence thread shows repetition, referral,
