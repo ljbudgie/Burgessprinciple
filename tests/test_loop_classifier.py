@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 
 from iris.loop_classifier import classify_thread
+from api import LoopClassificationRequest, classify_institutional_delay
 
 _ROOT = Path(__file__).resolve().parents[1]
 _MODULE_PATH = _ROOT / "iris-local.py"
@@ -117,6 +118,20 @@ def test_finding_schema_is_valid_json_and_covers_endpoint_fields():
 
     assert set(schema["required"]).issubset(finding)
     assert schema["properties"]["loop_type"]["enum"][-1] is None
+
+
+def test_api_endpoint_function_returns_provisional_finding():
+    result = classify_institutional_delay(
+        LoopClassificationRequest(
+            institution="Example Institution",
+            messages=[
+                message("2026-08-01", "Institution", "Verify your identity before we engage.", "institution", "A")
+            ],
+        )
+    )
+
+    assert result.loop_type == "identity_loop"
+    assert result.requires_human_confirmation is True
 
 
 class TestLoopEndpoint:
